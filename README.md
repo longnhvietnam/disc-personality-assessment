@@ -35,3 +35,23 @@ To run the app locally, use Streamlit:
 
 ```bash
 streamlit run disc_style.py
+```
+
+This will start the application and open it in your browser. Follow the prompts to complete the DISC assessment.
+
+## Usage
+
+The app will guide users through a series of questions, after which it calculates the DISC profile based on their answers. Users can:
+- View their DISC style profile in a visual format.
+- Read detailed descriptions of their primary and secondary styles.
+- Download their results as a PDF or JSON file.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- Powered by [Streamlit](https://streamlit.io).
+- PDF generation with [ReportLab](https://www.reportlab.com/).
+- Created by [Dawid Zyla](www.dzyla.com).
