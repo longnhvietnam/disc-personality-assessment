@@ -18,7 +18,7 @@
 
 1. Clone this repository:
     ```bash
-    git clone https://github.com/yourusername/disc-personality-assessment.git
+    git clone https://github.com/dzyla/disc-personality-assessment.git
     ```
 2. Navigate into the project directory:
     ```bash
