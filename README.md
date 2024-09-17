@@ -54,4 +54,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Powered by [Streamlit](https://streamlit.io).
 - PDF generation with [ReportLab](https://www.reportlab.com/).
-- Created by [Dawid Zyla](www.dzyla.com).
+- Created by [Dawid Zyla](https://dzyla.com).
