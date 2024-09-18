@@ -27,9 +27,6 @@ st.markdown(
         max-width: 1200px;
         margin: 0 auto;
     }
-    .st-bw {
-        background-color: #d3d3d3d3;
-    }
     .stButton>button {
         background-color: #184b6a;
         color: white;
@@ -82,7 +79,7 @@ if not st.session_state.started:
 
     #### Instructions:
     - You will be presented with a series of statements.
-    - For each statement, indicate how much you agree or disagree using the slider ().
+    - For each statement, indicate how much you agree or disagree using the options provided.
     - A value of **1** completely disagree, **2** somehow disagree, **3** neutral, **4** somehow agree, **5** completely agree
     - Once you complete the assessment, you'll receive your DISC style profile and a detailed breakdown of your results.
     - Carefully read the descriptions as some of them sound similar but have different meanings.
@@ -470,43 +467,74 @@ if st.session_state.started:
         random.shuffle(questions)
         st.session_state.questions = questions[:30]  # Use the first 30 questions
 
-    questions_per_page = 3
+    questions_per_page = 1  # Show one question at a time
     total_questions = len(st.session_state.questions)
     total_pages = (
         total_questions + questions_per_page - 1
     ) // questions_per_page  # Ceiling division
 
-    # Load DISC descriptions (for demonstration purposes, you may load from a JSON file in practice)
+    # Load DISC descriptions
     disc_descriptions = json.load(open("disc_descriptions.json", "r"))
 
     if not st.session_state.show_results:
         start = st.session_state.page_number * questions_per_page
         end = start + questions_per_page
-        current_questions = st.session_state.questions[start:end]
 
+        # Calculate progress
+        progress = (st.session_state.page_number) / total_questions
+
+        # Display progress bar outside the form
+        st.progress(progress)
+        
         with st.form(key=f"form_{st.session_state.page_number}"):
-            for i in range(start, min(end, total_questions)):
+            i = start
+            if i < total_questions:
                 q = st.session_state.questions[i]
                 n = i + 1
-                st.markdown(f"**{n}) {q['question']}**")
-                default_value = st.session_state.answers.get(i, 3)
-                st.session_state.answers[i] = st.slider(
-                    "Choose your response", 1, 5, default_value, key=f"slider_{i}"
+                st.markdown(f"#### {n}) {q['question']}")
+                options = [
+                    "Select an option",
+                    "1 - Completely Disagree",
+                    "2 - Somehow Disagree",
+                    "3 - Neutral",
+                    "4 - Somehow Agree",
+                    "5 - Completely Agree",
+                ]
+                selected_option = st.radio(
+                    "Choose your response",
+                    options=options,
+                    index=0,
+                    key=f"radio_{i}",
+                    horizontal=True,
                 )
-            if st.session_state.page_number < total_pages - 1:
-                submit_button = st.form_submit_button("Next")
+                if st.session_state.page_number < total_pages - 1:
+                    submit_button = st.form_submit_button("Next")
+                else:
+                    submit_button = st.form_submit_button("**Show My DISC Style**")
             else:
                 submit_button = st.form_submit_button("**Show My DISC Style**")
 
         if submit_button:
-            if st.session_state.page_number < total_pages - 1:
-                st.session_state.page_number += 1
-                st.rerun()
+            if selected_option == "Select an option":
+                st.warning("Please select a response to proceed.")
             else:
-                # Set flags to show results and indicate submission
-                st.session_state.show_results = True
-                st.session_state.submitted = False  # Ensure this is reset
-                st.rerun()
+                # Map the selected option to a score
+                score_mapping = {
+                    "1 - Completely Disagree": 1,
+                    "2 - Somehow Disagree": 2,
+                    "3 - Neutral": 3,
+                    "4 - Somehow Agree": 4,
+                    "5 - Completely Agree": 5,
+                }
+                st.session_state.answers[i] = score_mapping[selected_option]
+                if st.session_state.page_number < total_pages - 1:
+                    st.session_state.page_number += 1
+                    st.rerun()
+                else:
+                    # Set flags to show results and indicate submission
+                    st.session_state.show_results = True
+                    st.session_state.submitted = False  # Ensure this is reset
+                    st.rerun()
     else:
         # After the user has completed the assessment or uploaded results
         if not st.session_state.submitted:
