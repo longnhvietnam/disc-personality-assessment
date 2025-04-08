@@ -696,7 +696,6 @@ st.markdown(
     """
     ---
     <div style="text-align: center;">
-        <strong><a href="https://github.com/dzyla/disc-personality-assessment">Source code</a></strong> | Developed by <a href="https://dzyla.com">Dawid Zyla</a>
     </div>
     """,
     unsafe_allow_html=True,
